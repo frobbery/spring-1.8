@@ -1,0 +1,29 @@
+1708877863985:help
+1708877927070:add-book --bookName newBook
+1708878001148:add-book --bookName newBook --authorInitials M.M. --authorLastName LastName --genreNames Приключения, Новый жанр
+1708878045009:add-book --bookName newBook --authorInitials M.M. --authorLastname LastName --genreNames Приключения, Новый жанр
+1708878306781:delete-book 24
+1708878330567:delete-book-by-id 24
+1708878351883:add-book --bookName newBook --authorInitials M.M. --authorLastname LastName --genreNames Приключения, Новый жанр
+1708974857714:help
+1708974981807:a
+1708975179188:help
+1708975330627:add --bookName /gone with the wind
+1708975453597:add --bookName Gone
+1708975636023:add --bookName NewBook
+1708975720562:add --bookName newBook
+1708976014479:add --bookName new
+1708976066725:add --bookName Gone
+1708976080607:get 40
+1708976345041:add --bookName cute
+1708976360214:get 42
+1708976455828:update --bookId 42 --bookName cute --authorInitials YY --authorLastname Д --genreNames Приключения, Новый жанр
+1708976662218:get 42
+1708976688292:delete 42
+1708976707612:add --bookName cute --authorInitials YY --authorLastname Д --genreNames Приключения, Новый жанр
+1708976713828:get 45
+1708976723625:delete 45
+1708976730522:delete 26
+1708976734168:delete 34
+1708976737419:delete 38
+1708976741748:delete 40
