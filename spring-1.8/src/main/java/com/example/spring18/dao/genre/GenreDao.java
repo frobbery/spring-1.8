@@ -6,17 +6,17 @@ import java.util.List;
 
 public interface GenreDao {
 
-     int save(Genre genre);
+     long save(Genre genre);
 
-     Genre getById(int id);
+     Genre getById(long id);
 
      Genre getByName(String name);
 
-     List<Genre> getGenresByBookId(int bookId);
+     List<Genre> getGenresByBookId(long bookId);
 
      List<Genre> getAll();
 
      void updateById(Genre newGenre);
 
-     void delete(int id);
+     void delete(long id);
 }

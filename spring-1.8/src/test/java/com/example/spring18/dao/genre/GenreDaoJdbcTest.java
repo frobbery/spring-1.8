@@ -30,7 +30,7 @@ class GenreDaoJdbcTest {
                 .build();
 
         //when
-        int savedId = genreDao.save(genreToBeSaved);
+        long savedId = genreDao.save(genreToBeSaved);
 
         //then
         assertThat(genreDao.getById(savedId))
@@ -129,7 +129,7 @@ class GenreDaoJdbcTest {
     void updateById() {
         //given
         Genre newGenre = Genre.builder()
-                .id(1)
+                .id(1L)
                 .name("Не приключения")
                 .build();
 
@@ -146,7 +146,7 @@ class GenreDaoJdbcTest {
     @Test
     void delete() {
         //given
-        int genreToBeDeletedId = genreDao.save(Genre.builder().build());
+        long genreToBeDeletedId = genreDao.save(Genre.builder().build());
 
         //when
         genreDao.delete(genreToBeDeletedId);

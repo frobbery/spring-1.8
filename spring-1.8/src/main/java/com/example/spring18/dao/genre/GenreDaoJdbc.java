@@ -25,16 +25,16 @@ public class GenreDaoJdbc implements GenreDao {
     private final GenreMapper genreMapper = new GenreMapper();
 
     @Override
-    public int save(Genre genre) {
+    public long save(Genre genre) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", genre.getName());
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("insert into genres (name) values (:name)", params, kh, new String[]{"id"});
-        return Objects.requireNonNull(kh.getKey()).intValue();
+        return Objects.requireNonNull(kh.getKey()).longValue();
     }
 
     @Override
-    public Genre getById(int id) {
+    public Genre getById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return namedParameterJdbcOperations.queryForObject(
                 "select * from genres where id = :id", params, genreMapper);
@@ -48,7 +48,7 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public List<Genre> getGenresByBookId(int bookId) {
+    public List<Genre> getGenresByBookId(long bookId) {
         Map<String, Object> params = Collections.singletonMap("book_id", bookId);
         return namedParameterJdbcOperations.query(
                 "select * from genres where id in (select genre_id from books_genres where book_id = :book_id)",
@@ -67,7 +67,7 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         namedParameterJdbcOperations.update("delete from genres where id = :id", Map.of("id", id));
     }
 

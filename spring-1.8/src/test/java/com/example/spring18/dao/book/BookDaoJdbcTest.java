@@ -50,7 +50,7 @@ class BookDaoJdbcTest {
                 .build();
 
         //when
-        int savedBookId = bookDao.save(bookToBeSaved);
+        long savedBookId = bookDao.save(bookToBeSaved);
 
         //then
         assertThat(bookDao.getById(savedBookId))
@@ -75,7 +75,7 @@ class BookDaoJdbcTest {
                 .build();
 
         //when
-        int savedBookId = bookDao.save(bookToBeSaved);
+        long savedBookId = bookDao.save(bookToBeSaved);
 
         //then
         assertThat(bookDao.getById(savedBookId))
@@ -90,15 +90,15 @@ class BookDaoJdbcTest {
     void getById() {
         //given
         Book expectedBook = Book.builder()
-                .id(1)
+                .id(1L)
                 .name("Обычный приключенческий роман")
                 .author(Author.builder()
-                        .id(1)
+                        .id(1L)
                         .initials("А.С.")
                         .lastName("Пушкин")
                         .build())
                 .genres(List.of(Genre.builder()
-                        .id(1)
+                        .id(1L)
                         .name("Приключения")
                         .build()))
                 .build();
@@ -230,7 +230,7 @@ class BookDaoJdbcTest {
     @Test
     void delete() {
         //given
-        int bookToBeDeletedId = bookDao.save(Book.builder().build());
+        long bookToBeDeletedId = bookDao.save(Book.builder().build());
 
         //when
         bookDao.delete(bookToBeDeletedId);

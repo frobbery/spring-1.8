@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface BookDao {
 
-     int save(Book book);
+     long save(Book book);
 
-     Book getById(int id);
+     Book getById(long id);
 
      List<Book> getAll();
 
      void updateById(Book newBook);
 
-     void delete(int id);
+     void delete(long id);
 }

@@ -14,6 +14,7 @@ import org.springframework.shell.standard.ShellOption;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
@@ -36,7 +37,7 @@ public class ShellCommands {
                         .build());
             }
         }
-        int savedBookId = bookDao.save(Book.builder()
+        long savedBookId = bookDao.save(Book.builder()
                 .name(bookName)
                 .author(Author.builder()
                         .initials(authorInitials)
@@ -54,9 +55,18 @@ public class ShellCommands {
         System.out.println(MessageFormat.format("Book by id {0}: {1}", id, foundBook));
     }
 
+    @ShellMethod(value = "Get all books", key = {"all"})
+    @CatchAndWrite
+    public void getAllBooks() {
+        List<Book> foundBooks = bookDao.getAll();
+        System.out.println("Found books by are :\n" + foundBooks.stream()
+                .map(Book::toString)
+                .collect(Collectors.joining("\n")));
+    }
+
     @ShellMethod(value = "Update book by id", key = {"u", "update"})
     @CatchAndWrite
-    public void updateBook(@ShellOption int bookId, @ShellOption String bookName,
+    public void updateBook(@ShellOption long bookId, @ShellOption String bookName,
                            @ShellOption(defaultValue = "__NULL__") String authorInitials,
                            @ShellOption(defaultValue = "__NULL__") String authorLastname,
                            @ShellOption(defaultValue = "__NULL__") String... genreNames) {
@@ -82,7 +92,7 @@ public class ShellCommands {
 
     @ShellMethod(value = "Delete book by id", key = {"d", "delete"})
     @CatchAndWrite
-    public void deleteBookById(@ShellOption int id) {
+    public void deleteBookById(@ShellOption long id) {
         bookDao.delete(id);
         System.out.println(MessageFormat.format("Book by id {0} is deleted", id));
     }

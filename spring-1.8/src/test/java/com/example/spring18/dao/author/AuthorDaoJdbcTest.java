@@ -31,7 +31,7 @@ class AuthorDaoJdbcTest {
                 .build();
 
         //when
-        int savedId = authorDao.save(authorToBeSaved);
+        long savedId = authorDao.save(authorToBeSaved);
 
         //then
         assertThat(authorDao.getById(savedId))
@@ -124,7 +124,7 @@ class AuthorDaoJdbcTest {
     @DisplayName("Удалять автора по id")
     void delete() {
         //given
-        int authorToBeDeletedId = authorDao.save(Author.builder().build());
+        long authorToBeDeletedId = authorDao.save(Author.builder().build());
 
         //when
         authorDao.delete(authorToBeDeletedId);

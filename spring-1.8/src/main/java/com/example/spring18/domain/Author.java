@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class Author {
 
-    private int id;
+    private long id;
 
     private String initials;
 

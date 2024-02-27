@@ -27,18 +27,18 @@ public class AuthorDaoJdbc implements AuthorDao {
     private final AuthorMapper authorMapper = new AuthorMapper();
 
     @Override
-    public int save(Author author) {
+    public long save(Author author) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("initials", author.getInitials());
         params.addValue("lastname", author.getLastName());
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("insert into authors (initials, lastname) values (:initials, :lastname)",
                 params, kh, new String[]{"id"});
-        return Objects.requireNonNull(kh.getKey()).intValue();
+        return Objects.requireNonNull(kh.getKey()).longValue();
     }
 
     @Override
-    public Author getById(int id) {
+    public Author getById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return namedParameterJdbcOperations.queryForObject(
                 "select * from authors where id = :id", params, authorMapper);
@@ -69,7 +69,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         namedParameterJdbcOperations.update("delete from authors where id = :id", Map.of("id", id));
     }
 

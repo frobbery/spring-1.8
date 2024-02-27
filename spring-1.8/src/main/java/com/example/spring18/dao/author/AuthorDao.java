@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface AuthorDao {
 
-     int save(Author author);
+     long save(Author author);
 
-     Author getById(int id);
+     Author getById(long id);
 
      Author getByLastnameAndInitials(String lastname, String initials);
 
@@ -16,5 +16,5 @@ public interface AuthorDao {
 
      void updateById(Author newAuthor);
 
-     void delete(int id);
+     void delete(long id);
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 @Builder
 public class Genre {
 
-    private int id;
+    private long id;
 
     private String name;
 
