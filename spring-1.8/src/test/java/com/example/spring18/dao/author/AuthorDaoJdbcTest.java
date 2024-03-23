@@ -46,8 +46,8 @@ class AuthorDaoJdbcTest {
         //given
         Author expectedAuthor = Author.builder()
                 .id(1)
-                .initials("А.С.")
-                .lastName("Пушкин")
+                .initials("A.S.")
+                .lastName("Pushkin")
                 .build();
 
         //when
@@ -65,8 +65,8 @@ class AuthorDaoJdbcTest {
         //given
         Author expectedAuthor = Author.builder()
                 .id(2)
-                .initials("Д.А")
-                .lastName("Рубина")
+                .initials("D.A.")
+                .lastName("Rubina")
                 .build();
 
         //when
@@ -85,13 +85,13 @@ class AuthorDaoJdbcTest {
         //given
         List<Author> expectedAuthors = List.of(Author.builder()
                 .id(1)
-                .initials("А.С.")
-                .lastName("Пушкин")
+                .initials("A.S.")
+                .lastName("Pushkin")
                 .build(),
                 Author.builder()
                         .id(2)
-                        .initials("Д.А")
-                        .lastName("Рубина")
+                        .initials("D.A.")
+                        .lastName("Rubina")
                         .build());
 
         //when
@@ -107,8 +107,8 @@ class AuthorDaoJdbcTest {
         //given
         Author newAuthor = Author.builder()
                 .id(1)
-                .initials("К.У.")
-                .lastName("Кушкин")
+                .initials("K.U.")
+                .lastName("Kushkin")
                 .build();
 
         //when

@@ -33,8 +33,8 @@ class BookDaoJdbcTest {
                 .name("testBook")
                 .author(Author.builder()
                         .id(1L)
-                        .initials("А.С.")
-                        .lastName("Пушкин")
+                        .initials("A.S.")
+                        .lastName("Pushkin")
                         .build())
                 .build();
 
@@ -56,11 +56,11 @@ class BookDaoJdbcTest {
         var authorId = 2L;
         Book expectedBook = Book.builder()
                 .id(1L)
-                .name("Обычный приключенческий роман")
+                .name("Regular adventure novel")
                 .author(Author.builder()
                         .id(2)
-                        .initials("Д.А")
-                        .lastName("Рубина")
+                        .initials("D.A.")
+                        .lastName("Rubina")
                         .build())
                 .build();
 
@@ -99,11 +99,11 @@ class BookDaoJdbcTest {
         //given
         Book expectedBook = Book.builder()
                 .id(1L)
-                .name("Обычный приключенческий роман")
+                .name("Regular adventure novel")
                 .author(Author.builder()
                         .id(1L)
-                        .initials("А.С.")
-                        .lastName("Пушкин")
+                        .initials("A.S.")
+                        .lastName("Pushkin")
                         .build())
                 .build();
 
@@ -172,29 +172,29 @@ class BookDaoJdbcTest {
         //given
         List<Book> expectedBooks = List.of(Book.builder()
                         .id(1)
-                        .name("Обычный приключенческий роман")
+                        .name("Regular adventure novel")
                         .author(Author.builder()
                                 .id(1)
-                                .initials("А.С.")
-                                .lastName("Пушкин")
+                                .initials("A.S.")
+                                .lastName("Pushkin")
                                 .build())
                         .build(),
                 Book.builder()
                         .id(2)
-                        .name("Обычный любовный роман")
+                        .name("Regular romance novel")
                         .author(Author.builder()
                                 .id(2)
-                                .initials("Д.А")
-                                .lastName("Рубина")
+                                .initials("D.A.")
+                                .lastName("Rubina")
                                 .build())
                         .build(),
                 Book.builder()
                         .id(3)
-                        .name("Любовно-приключенческий роман")
+                        .name("Romance-adventure novel")
                         .author(Author.builder()
                                 .id(2)
-                                .initials("Д.А")
-                                .lastName("Рубина")
+                                .initials("D.A.")
+                                .lastName("Rubina")
                                 .build())
                         .build());
 
@@ -215,8 +215,8 @@ class BookDaoJdbcTest {
                 .id(1)
                 .name("testBook")
                 .author(Author.builder()
-                        .initials("А.С.")
-                        .lastName("Пушкин")
+                        .initials("A.S.")
+                        .lastName("Pushkin")
                         .build())
                 .build();
 

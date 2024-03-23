@@ -45,7 +45,7 @@ class GenreDaoJdbcTest {
         //given
         Genre expectedGenre = Genre.builder()
                 .id(1)
-                .name("Приключения")
+                .name("Adventure")
                 .build();
 
         //when
@@ -63,11 +63,11 @@ class GenreDaoJdbcTest {
         //given
         Genre expectedGenre = Genre.builder()
                 .id(1)
-                .name("Приключения")
+                .name("Adventure")
                 .build();
 
         //when
-        Genre actualGenre = genreDao.getByName("Приключения");
+        Genre actualGenre = genreDao.getByName("Adventure");
 
         //then
         assertThat(actualGenre)
@@ -82,11 +82,11 @@ class GenreDaoJdbcTest {
         int bookId = 3;
         List<Genre> expectedGenres = List.of(Genre.builder()
                         .id(1)
-                        .name("Приключения")
+                        .name("Adventure")
                         .build(),
                 Genre.builder()
                         .id(2)
-                        .name("Любовь")
+                        .name("Romance")
                         .build());
 
         //when
@@ -104,15 +104,11 @@ class GenreDaoJdbcTest {
         //given
         List<Genre> expectedGenres = List.of(Genre.builder()
                         .id(1)
-                        .name("Приключения")
+                        .name("Adventure")
                         .build(),
                 Genre.builder()
                         .id(2)
-                        .name("Любовь")
-                        .build(),
-                Genre.builder()
-                        .id(3)
-                        .name("История")
+                        .name("Romance")
                         .build());
 
         //when
@@ -121,7 +117,7 @@ class GenreDaoJdbcTest {
         //then
         assertThat(actualGenres)
                 .containsAll(expectedGenres)
-                .hasSize(3);
+                .hasSize(2);
     }
 
     @DisplayName("Обновлять данные жанра по id")
@@ -130,7 +126,7 @@ class GenreDaoJdbcTest {
         //given
         Genre newGenre = Genre.builder()
                 .id(1L)
-                .name("Не приключения")
+                .name("Not adventure")
                 .build();
 
         //when
