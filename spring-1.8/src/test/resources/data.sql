@@ -1,5 +1,4 @@
-INSERT INTO AUTHORS (INITIALS, LASTNAME) VALUES ('А.С.', 'Пушкин'), ('Д.А', 'Рубина');
-INSERT INTO BOOKS (NAME, AUTHOR_ID) VALUES ('Обычный приключенческий роман', 1), ('Обычный любовный роман', 2), ('Любовно-приключенческий роман', 2);
-INSERT INTO GENRES (NAME) VALUES ('Приключения'), ('Любовь');
+INSERT INTO AUTHORS (INITIALS, LASTNAME) VALUES ('Рђ.РЎ.', 'РџСѓС€РєРёРЅ'), ('Р”.Рђ', 'Р СѓР±РёРЅР°');
+INSERT INTO BOOKS (NAME, AUTHOR_ID) VALUES ('РћР±С‹С‡РЅС‹Р№ РїСЂРёРєР»СЋС‡РµРЅС‡РµСЃРєРёР№ СЂРѕРјР°РЅ', 1), ('РћР±С‹С‡РЅС‹Р№ Р»СЋР±РѕРІРЅС‹Р№ СЂРѕРјР°РЅ', 2), ('Р›СЋР±РѕРІРЅРѕ-РїСЂРёРєР»СЋС‡РµРЅС‡РµСЃРєРёР№ СЂРѕРјР°РЅ', 2);
+INSERT INTO GENRES (NAME) VALUES ('РџСЂРёРєР»СЋС‡РµРЅРёСЏ'), ('Р›СЋР±РѕРІСЊ');
 INSERT INTO BOOKS_GENRES (BOOK_ID, GENRE_ID) VALUES (1, 1), (2, 2), (3, 1), (3, 2);
-INSERT INTO GENRES (NAME) VALUES ('История');

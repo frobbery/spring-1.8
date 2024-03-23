@@ -1,10 +1,10 @@
 package com.example.spring18.shell;
 
 
-import com.example.spring18.dao.book.BookDao;
 import com.example.spring18.domain.Author;
 import com.example.spring18.domain.Book;
 import com.example.spring18.domain.Genre;
+import com.example.spring18.services.book.BookService;
 import com.example.spring18.shell.aspect.CatchAndWrite;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -22,7 +22,7 @@ import static java.util.Objects.nonNull;
 @ShellComponent
 public class ShellCommands {
 
-    private final BookDao bookDao;
+    private final BookService bookService;
 
     @ShellMethod(value = "Add book", key = {"a", "add"})
     @CatchAndWrite
@@ -37,7 +37,7 @@ public class ShellCommands {
                         .build());
             }
         }
-        long savedBookId = bookDao.save(Book.builder()
+        long savedBookId = bookService.saveBook(Book.builder()
                 .name(bookName)
                 .author(Author.builder()
                         .initials(authorInitials)
@@ -50,15 +50,15 @@ public class ShellCommands {
 
     @ShellMethod(value = "Get book by id", key = {"g", "get"})
     @CatchAndWrite
-    public void getBookById(@ShellOption int id) {
-        Book foundBook = bookDao.getById(id);
+    public void getBookById(@ShellOption long id) {
+        Book foundBook = bookService.getBookById(id);
         System.out.println(MessageFormat.format("Book by id {0}: {1}", id, foundBook));
     }
 
     @ShellMethod(value = "Get all books", key = {"all"})
     @CatchAndWrite
     public void getAllBooks() {
-        List<Book> foundBooks = bookDao.getAll();
+        List<Book> foundBooks = bookService.getAllBooks();
         System.out.println("Found books by are :\n" + foundBooks.stream()
                 .map(Book::toString)
                 .collect(Collectors.joining("\n")));
@@ -78,7 +78,7 @@ public class ShellCommands {
                         .build());
             }
         }
-        bookDao.updateById(Book.builder()
+        bookService.updateBookById(Book.builder()
                 .id(bookId)
                 .name(bookName)
                 .author(Author.builder()
@@ -93,7 +93,7 @@ public class ShellCommands {
     @ShellMethod(value = "Delete book by id", key = {"d", "delete"})
     @CatchAndWrite
     public void deleteBookById(@ShellOption long id) {
-        bookDao.delete(id);
+        bookService.deleteBookById(id);
         System.out.println(MessageFormat.format("Book by id {0} is deleted", id));
     }
 }

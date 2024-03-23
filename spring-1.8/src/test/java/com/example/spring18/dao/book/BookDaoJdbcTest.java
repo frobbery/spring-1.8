@@ -2,9 +2,9 @@ package com.example.spring18.dao.book;
 
 import com.example.spring18.dao.author.AuthorDaoJdbc;
 import com.example.spring18.dao.genre.GenreDaoJdbc;
+import com.example.spring18.dao.util.BookGenreRelation;
 import com.example.spring18.domain.Author;
 import com.example.spring18.domain.Book;
-import com.example.spring18.domain.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.dao.DataAccessException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Dao для работы с книгами должно:")
 @JdbcTest
@@ -25,64 +25,72 @@ class BookDaoJdbcTest {
     @Autowired
     private BookDaoJdbc bookDao;
 
-    @Autowired
-    private AuthorDaoJdbc authorDao;
-
-    @Autowired
-    private GenreDaoJdbc genreDao;
-
-    @DisplayName("Сохранять книгу с существующим автором")
+    @DisplayName("Сохранять книгу")
     @Test
-    void saveWithExistingAuthor() {
+    void saveBook() {
         //given
         Book bookToBeSaved = Book.builder()
                 .name("testBook")
                 .author(Author.builder()
+                        .id(1L)
+                        .initials("А.С.")
+                        .lastName("Пушкин")
+                        .build())
+                .build();
+
+        //when
+        long savedBookId = bookDao.save(bookToBeSaved);
+
+        //then
+        assertThat(bookDao.getById(savedBookId))
+                .usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(bookToBeSaved);
+    }
+
+    @DisplayName("Обновить id автора книги")
+    @Test
+    void updateAuthorId() {
+        //given
+        var bookId = 1L;
+        var authorId = 2L;
+        Book expectedBook = Book.builder()
+                .id(1L)
+                .name("Обычный приключенческий роман")
+                .author(Author.builder()
+                        .id(2)
                         .initials("Д.А")
                         .lastName("Рубина")
                         .build())
-                .genres(List.of(Genre.builder()
-                                .name("Приключения")
-                                .build(),
-                        Genre.builder()
-                                .name("Тестовый жанр")
-                                .build()))
                 .build();
 
         //when
-        long savedBookId = bookDao.save(bookToBeSaved);
+        bookDao.updateAuthorId(bookId, authorId);
 
         //then
-        assertThat(bookDao.getById(savedBookId))
+        assertThat(bookDao.getById(expectedBook.getId()))
                 .usingRecursiveComparison()
-                .ignoringFields("id", "author.id", "genres.id")
-                .isEqualTo(bookToBeSaved);
-        assertDoesNotThrow(() -> genreDao.getByName("Тестовый жанр"));
+                .isEqualTo(expectedBook);
     }
 
-    @DisplayName("Сохранять книгу с несуществующим автором")
+    @DisplayName("Создать связь между книгой и жанром")
     @Test
-    void saveWithNonExistingAuthor() {
+    void createBookGenreLink() {
         //given
-        Author newAuthor = Author.builder()
-                .initials("Н.Н.")
-                .lastName("Неизвестный")
-                .build();
-        Book bookToBeSaved = Book.builder()
-                .name("testBook")
-                .author(newAuthor)
-                .genres(List.of())
+        var bookId = 1L;
+        var genreId = 2L;
+        var expectedBookGenreRelation = BookGenreRelation.builder()
+                .bookId(bookId)
+                .genreId(genreId)
                 .build();
 
         //when
-        long savedBookId = bookDao.save(bookToBeSaved);
+        bookDao.createBookGenreLink(bookId, genreId);
 
         //then
-        assertThat(bookDao.getById(savedBookId))
-                .usingRecursiveComparison()
-                .ignoringFields("id", "author.id", "genres.id")
-                .isEqualTo(bookToBeSaved);
-        assertDoesNotThrow(() -> authorDao.getByLastnameAndInitials(newAuthor.getLastName(), newAuthor.getInitials()));
+        assertThat(bookDao.getBookGenreRelations(bookId))
+                .hasSize(2)
+                .contains(expectedBookGenreRelation);
     }
 
     @DisplayName("Получать книгу по Id")
@@ -97,10 +105,6 @@ class BookDaoJdbcTest {
                         .initials("А.С.")
                         .lastName("Пушкин")
                         .build())
-                .genres(List.of(Genre.builder()
-                        .id(1L)
-                        .name("Приключения")
-                        .build()))
                 .build();
 
         //when
@@ -110,6 +114,56 @@ class BookDaoJdbcTest {
         assertThat(actualBook)
                 .usingRecursiveComparison()
                 .isEqualTo(expectedBook);
+    }
+
+    @DisplayName("Получать связи между определенной книгой и ее жанрами")
+    @Test
+    void getBookGenreRelationsById() {
+        //given
+        var bookId = 1L;
+        var genreId = 1L;
+        var expectedBookGenreRelations = List.of(BookGenreRelation.builder()
+                .bookId(bookId)
+                .genreId(genreId)
+                .build());
+
+        //when
+        var actualBookGenreRelations = bookDao.getBookGenreRelations(bookId);
+
+        //then
+        assertThat(actualBookGenreRelations)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedBookGenreRelations);
+    }
+
+    @DisplayName("Получать связи между книгами и жанрами")
+    @Test
+    void getBookGenreRelations() {
+        //given
+        var expectedBookGenreRelations = List.of(BookGenreRelation.builder()
+                        .bookId(1L)
+                        .genreId(1L)
+                        .build(),
+                BookGenreRelation.builder()
+                        .bookId(2L)
+                        .genreId(2L)
+                        .build(),
+                BookGenreRelation.builder()
+                        .bookId(3L)
+                        .genreId(1L)
+                        .build(),
+                BookGenreRelation.builder()
+                        .bookId(3L)
+                        .genreId(2L)
+                        .build());
+
+        //when
+        var actualBookGenreRelations = bookDao.getBookGenreRelations();
+
+        //then
+        assertThat(actualBookGenreRelations)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedBookGenreRelations);
     }
 
     @DisplayName("Получать все книги")
@@ -124,10 +178,6 @@ class BookDaoJdbcTest {
                                 .initials("А.С.")
                                 .lastName("Пушкин")
                                 .build())
-                        .genres(List.of(Genre.builder()
-                                .id(1)
-                                .name("Приключения")
-                                .build()))
                         .build(),
                 Book.builder()
                         .id(2)
@@ -137,10 +187,6 @@ class BookDaoJdbcTest {
                                 .initials("Д.А")
                                 .lastName("Рубина")
                                 .build())
-                        .genres(List.of(Genre.builder()
-                                .id(2)
-                                .name("Любовь")
-                                .build()))
                         .build(),
                 Book.builder()
                         .id(3)
@@ -150,14 +196,6 @@ class BookDaoJdbcTest {
                                 .initials("Д.А")
                                 .lastName("Рубина")
                                 .build())
-                        .genres(List.of(Genre.builder()
-                                        .id(1)
-                                        .name("Приключения")
-                                        .build(),
-                                Genre.builder()
-                                        .id(2)
-                                        .name("Любовь")
-                                        .build()))
                         .build());
 
         //when
@@ -169,23 +207,17 @@ class BookDaoJdbcTest {
                 .hasSize(3);
     }
 
-    @DisplayName("Обновлять данные книги по id с существующим автором")
+    @DisplayName("Обновлять данные книги по id")
     @Test
-    void updateByIdWithExistingAuthor() {
+    void updateById() {
         //given
         Book newBook = Book.builder()
                 .id(1)
                 .name("testBook")
                 .author(Author.builder()
-                        .initials("Д.А")
-                        .lastName("Рубина")
+                        .initials("А.С.")
+                        .lastName("Пушкин")
                         .build())
-                .genres(List.of(Genre.builder()
-                                .name("Приключения")
-                                .build(),
-                        Genre.builder()
-                                .name("Тестовый жанр")
-                                .build()))
                 .build();
 
         //when
@@ -194,36 +226,42 @@ class BookDaoJdbcTest {
         //then
         assertThat(bookDao.getById(newBook.getId()))
                 .usingRecursiveComparison()
-                .ignoringFields("author.id", "genres.id")
+                .ignoringFields("author.id")
                 .isEqualTo(newBook);
-        assertDoesNotThrow(() -> genreDao.getByName("Тестовый жанр"));
     }
 
-    @DisplayName("Обновлять данные книги по id с несуществующим автором")
+    @DisplayName("Удалять связь между книгой и жанром")
     @Test
-    void updateByIdWithNonExistingAuthor() {
+    void deleteBookGenreLink() {
         //given
-        Author newAuthor = Author.builder()
-                .initials("Н.Н.")
-                .lastName("Неизвестный")
-                .build();
-        Book newBook = Book.builder()
-                .id(3)
-                .name("testBook")
-                .author(newAuthor)
-                .genres(List.of())
+        var bookId = 3L;
+        var genreId = 2L;
+        var expectedBookGenreRelation = BookGenreRelation.builder()
+                .bookId(bookId)
+                .genreId(1L)
                 .build();
 
         //when
-        bookDao.updateById(newBook);
+        bookDao.deleteBookGenreLink(bookId, genreId);
 
         //then
-        assertThat(bookDao.getById(newBook.getId()))
-                .usingRecursiveComparison()
-                .ignoringFields("author.id", "genres.id")
-                .isEqualTo(newBook);
-        assertDoesNotThrow(() -> authorDao.getByLastnameAndInitials(newAuthor.getLastName(), newAuthor.getInitials()));
-        assertThat(genreDao.getGenresByBookId(newBook.getId())).isEmpty();
+        assertThat(bookDao.getBookGenreRelations(bookId))
+                .hasSize(1)
+                .contains(expectedBookGenreRelation);
+    }
+
+    @DisplayName("Удалять все связи между книгой и жанрами")
+    @Test
+    void deleteBookGenreLinks() {
+        //given
+        var bookId = 3L;
+
+        //when
+        bookDao.deleteBookGenreLinks(bookId);
+
+        //then
+        assertThat(bookDao.getBookGenreRelations(bookId))
+                .hasSize(0);
     }
 
     @DisplayName("Удалять книгу по id")
